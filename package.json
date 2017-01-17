@@ -4,9 +4,12 @@
   "description": "CS 210A Mini-Project",
   "dependencies": {
     "express": "~4.13.1",
-    "socket.io": "~1.4.8"
+    "lodash": "~4.14.1",
+    "socket.io": "~1.4.8",
+    "socket.io-client": "~1.4.8"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "node cli_client.js"
   }
 }

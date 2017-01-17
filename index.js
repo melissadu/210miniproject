@@ -34,11 +34,10 @@ app.use(function(err, req, res, next) {
 // Register Socket.io event handlers
 io.on('connection', function(socket){
   socket.emit('connected');
-  set_id_number(socket.id);
   io.emit('chat message', {
       type: "text",
       sender: "server",
-      message: "someone connected"});
+      message: "someone connected"
   });
   socket.on('chat message', function(msg){
     io.emit('chat message', msg);
@@ -47,7 +46,8 @@ io.on('connection', function(socket){
     io.emit('chat message', {
       type: "text",
       sender: "server",
-      message: "someone disconnected"});
+      message: "someone disconnected"
+    });
   });
 });
 

@@ -22,11 +22,11 @@ var number = 0;
 setInterval(function() {
   if (socket.connected) {
     number = number + 1;
-    console.log('Telling server our new number: ', number);
+    console.log('Telling server our new favorite number: ', number);
     socket.emit('chat message', {
       type: 'text',
       sender: 'Test client ' + clientId,
-      message: 'Our new number is ' + number
+      message: 'Our new favorite number is ' + number
     });
   }
 }, 2000);

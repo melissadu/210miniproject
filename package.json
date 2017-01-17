@@ -9,7 +9,7 @@
     "socket.io-client": "~1.4.8"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node server.js",
     "test": "node cli_client.js"
   }
 }

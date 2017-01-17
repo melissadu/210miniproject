@@ -23,10 +23,12 @@ setInterval(function() {
   if (socket.connected) {
     number = number + 1;
     console.log('Telling server our new favorite number: ', number);
+    var d = new Date();
     socket.emit('chat message', {
       type: 'text',
       sender: 'Test client ' + clientId,
-      message: 'Our new favorite number is ' + number
+      message: 'Our new favorite number is ' + number,
+      timestamp: d.toLocaleString()
     });
   }
 }, 2000);

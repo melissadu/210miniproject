@@ -34,26 +34,26 @@ app.use(function(err, req, res, next) {
 // Register Socket.io event handlers
 io.on('connection', function(socket){
   socket.emit('connected');
+  var d = new Date();
   io.emit('chat message', {
       type: "text",
-      sender: "server",
-      message: "someone connected"
+      sender: "Server",
+      message: "Someone connected!",
+      timestamp: d.toLocaleString()
   });
   socket.on('chat message', function(msg){
     io.emit('chat message', msg);
   });
   socket.on('disconnect', function(msg){
+    var d = new Date();
     io.emit('chat message', {
       type: "text",
-      sender: "server",
-      message: "someone disconnected"
+      sender: "Server",
+      message: "Someone disconnected!",
+      timestamp: d.toLocaleString()
     });
   });
-	socket.on('disconnect', function() {
-		socket.emit('chat message', 'DISCONNECTED:' + socket.id);
-	});
 });
-
 
 
 

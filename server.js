@@ -35,10 +35,10 @@ app.use(function(err, req, res, next) {
 io.on('connection', function(socket){
   socket.emit('connected');
   var d = new Date();
-  io.emit('chat message', {
+  socket.broadcast.emit('chat message', {
       type: "text",
       sender: "Server",
-      message: "Someone connected!",
+      message: "Someone else connected!",
       timestamp: d.toLocaleString()
   });
   socket.on('chat message', function(msg){
@@ -46,10 +46,10 @@ io.on('connection', function(socket){
   });
   socket.on('disconnect', function(msg){
     var d = new Date();
-    io.emit('chat message', {
+    socket.broadcast.emit('chat message', {
       type: "text",
       sender: "Server",
-      message: "Someone disconnected!",
+      message: "Someone else disconnected!",
       timestamp: d.toLocaleString()
     });
   });

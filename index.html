@@ -24,18 +24,39 @@
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io();
+
+      function showText(text) {
+        $('#messages').append($('<li>').text(text));
+      }
+      function getMessageBoxText() {
+        return $('#m').val();
+      }
+      function clearMessageBoxText() {
+        $('#m').val('');
+      }
+
       $('form').submit(function(event){
         var d = new Date();
-        data = {"message": $('#m').val(), "timestamp": d};
-        socket.emit('chat message', data);
-        $('#m').val('');
-        event.preventDefault();
+        socket.emit('chat message', {
+          "type": "text",
+          "sender": "Placeholder Sender Please Fix Me",
+          "message": getMessageBoxText(),
+          "timestamp": d.toLocaleString()
+        });
+        clearMessageBoxText();
+        event.preventDefault(); // for consistent correct behavior on form submissions
       });
-      socket.on('chat message', function(data){
-        $('#messages').append($('<li>').text(data));
+
+      socket.on('chat message', function(msg){
+        var displayText = '';
+        if (msg.timestamp !== undefined) {
+          displayText += '[' + msg.timestamp + '] ';
+        }
+        displayText += msg.sender + ': ' + msg.message;
+        showText(displayText);
       });
       socket.on('connected', function() {
-        socket.emit('chat message', 'hello, world!');
+        showText('Connected to the server!');
       });
     </script>
   </body>

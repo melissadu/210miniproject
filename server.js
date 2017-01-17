@@ -1,5 +1,6 @@
 var express = require('express');
 var http = require('http');
+var moment = require('moment-timezone');
 
 var app = express();
 var server = http.Server(app);
@@ -30,27 +31,29 @@ app.use(function(err, req, res, next) {
 });
 
 
+function getCurrentTime() {
+  return moment().tz('America/Los_Angeles').format('M/DD/YYYY H:mm:ss A');
+}
+
 
 // Register Socket.io event handlers
 io.on('connection', function(socket){
   socket.emit('connected');
-  var d = new Date();
   socket.broadcast.emit('chat message', {
       type: "text",
       sender: "Server",
       message: "Someone else connected!",
-      timestamp: d.toLocaleString()
+      timestamp: getCurrentTime()
   });
   socket.on('chat message', function(msg){
     io.emit('chat message', msg);
   });
   socket.on('disconnect', function(msg){
-    var d = new Date();
     socket.broadcast.emit('chat message', {
       type: "text",
       sender: "Server",
       message: "Someone else disconnected!",
-      timestamp: d.toLocaleString()
+      timestamp: getCurrentTime()
     });
   });
 });

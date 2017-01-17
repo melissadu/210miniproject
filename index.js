@@ -30,12 +30,24 @@ app.use(function(err, req, res, next) {
 });
 
 
+
 // Register Socket.io event handlers
 io.on('connection', function(socket){
   socket.emit('connected');
-  io.emit('chat message', 'new connection: ' + socket.id);
+  set_id_number(socket.id);
+  io.emit('chat message', {
+      type: "text",
+      sender: "server",
+      message: "someone connected"});
+  });
   socket.on('chat message', function(msg){
-    io.emit('chat message', socket.id + ': ' + msg);
+    io.emit('chat message', msg);
+  });
+  socket.on('disconnect', function(msg){
+    io.emit('chat message', {
+      type: "text",
+      sender: "server",
+      message: "someone disconnected"});
   });
 });
 

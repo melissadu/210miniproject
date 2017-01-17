@@ -37,7 +37,12 @@ io.on('connection', function(socket){
   socket.on('chat message', function(msg){
     io.emit('chat message', socket.id + ': ' + msg);
   });
+	socket.on('disconnect', function() {
+		socket.emit('chat message', 'DISCONNECTED:' + socket.id);
+	});
 });
+
+
 
 
 // Start the server
@@ -45,4 +50,5 @@ var port = process.env.PORT || 5000;
 server.listen(port, function(){
   console.log('listening on *:%d', port);
 });
+
 

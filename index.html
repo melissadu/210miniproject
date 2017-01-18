@@ -14,12 +14,17 @@
       #image_button {width: 15%; background: rgb(130, 224, 255); border: none; padding: 10px;} 
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
-      #messages {overflow-y:auto;}
+      #messages {overflow:hidden; overflow-y:scroll;}
+      #message-box {max-width: 60%}
+      .rtc {max-width: 300px;}
+      div {display: inline-block;}
       ul {height: 90vh; border: 2px solid black;}
     </style>
   </head>
   <body>
-    <ul id="messages"></ul>
+    <div id = "message-box"><ul id="messages"></ul></div>
+    <div id="l-video"></div>
+    <div id="r-video"></div>
     <form action="#">
       <input id="name" placeholder="Enter Name Here" autocomplete="off" />
       <input id="m" placeholder="Message" autocomplete="off" />
@@ -31,6 +36,7 @@
 
     <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script src="./rtc.min.js"></script>
     <script>
       var socket = io();
 
@@ -41,6 +47,10 @@
       function showPhoto(text, photo) {
         $('#messages').append($('<li>').text(text));
         $('#messages').append('<li><img src="' + photo + '" width="350px" height="350px"/></li>');
+      }
+
+      function previewUrl(url) {
+        $('#messages').append('<li><iframe src="' + url + '"  sandbox="allow-same-origin allow-scripts allow-forms" width = "600" height = "300"></iframe></li>');
       }
 
       function getMessageBoxText() {
@@ -79,6 +89,10 @@
           }
           displayText += msg.sender + ': ' + msg.message;
           showText(displayText);
+          console.log(msg.message.substring(0,4) )
+          if(msg.message.substring(0,4) == "http"){
+            previewUrl(msg.message);
+          }
         } else if (msg.type == "photo"){
           var displayText = '';
           if (msg.timestamp !== undefined) {
@@ -110,6 +124,27 @@
         data.chat.forEach(showChatMessage);
         showText('------------------------------------------');
       });
+
+      //for webcam:
+
+      // Set RTC options.
+      var rtcOpts = {
+        room: 'common-room',
+        signaller: 'https://cs210a.herokuapp.com'
+      };
+      // call RTC module
+      var rtc = RTC(rtcOpts);
+      // A div element to show our local video stream
+      var localVideo = document.getElementById('l-video');
+      // A div element to show our remote video streams
+      var remoteVideo = document.getElementById('r-video');
+
+      // Display local and remote video streams
+      localVideo.appendChild(rtc.local);
+      remoteVideo.appendChild(rtc.remote);
+
+      // Detect when RTC has established a session
+      rtc.on('ready', init);
 
     </script>
   </body>

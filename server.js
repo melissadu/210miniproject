@@ -6,11 +6,18 @@ var app = express();
 var server = http.Server(app);
 
 var io = require('socket.io')(server);
+var switchboard = require('rtc-switchboard')(server);
 
 
 // Serve static HTML files
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
+});
+app.get('/rtc.min.js', function(req, res){
+  res.sendFile(__dirname + '/rtc.min.js');
+});
+app.get('/webcam_client.html', function(req, res){
+  res.sendFile(__dirname + '/webcam_client.html');
 });
 
 
@@ -32,31 +39,64 @@ app.use(function(err, req, res, next) {
 
 
 function getCurrentTime() {
-  return moment().tz('America/Los_Angeles').format('M/DD/YYYY H:mm:ss A');
+  return moment().tz('America/Los_Angeles').format('M/DD/YYYY, h:mm:ss A');
+}
+
+function makeServerMessage(messageText) {
+  return {
+    type: "text",
+    sender: "Server",
+    message: messageText,
+    timestamp: getCurrentTime()
+  };
+}
+
+
+// Chat message logging
+var messageLog = [];
+function logChatMessage(msg) {
+  messageLog.push(msg);
+}
+
+
+// Make socket IDs human-readable!
+var socketIDs = {};
+var idCounter = 0;
+function setID(socketID) {
+  if (socketIDs[socketID] === undefined) {
+    socketIDs[socketID] = idCounter;
+    idCounter += 1;
+  }
+}
+function getID(socketID) {
+  return socketIDs[socketID];
 }
 
 
 // Register Socket.io event handlers
 io.on('connection', function(socket){
-  socket.emit('connected');
-  socket.broadcast.emit('chat message', {
-      type: "text",
-      sender: "Server",
-      message: "Someone else connected!",
-      timestamp: getCurrentTime()
-  });
-  
-  socket.on('chat message', function(msg){
-    io.emit('chat message', msg);
+  socket.emit('connected', {
+    chat: messageLog
   });
 
+  setID(socket.id);
+
+  // Announce new connection
+  var connectMessage = makeServerMessage("Client " + getID(socket.id) + " connected!");
+  socket.broadcast.emit('chat message', connectMessage);
+  logChatMessage(connectMessage);
+
+  // Pass messages between clients
+  socket.on('chat message', function(msg){
+    io.emit('chat message', msg);
+    logChatMessage(msg);
+  });
+
+  // Handle disconnections
   socket.on('disconnect', function(msg){
-    socket.broadcast.emit('chat message', {
-      type: "text",
-      sender: "Server",
-      message: "Someone else disconnected!",
-      timestamp: getCurrentTime()
-    });
+    var disconnectMessage = makeServerMessage("Client " + getID(socket.id) + " disconnected!");
+    socket.broadcast.emit('chat message', disconnectMessage);
+    logChatMessage(disconnectMessage);
   });
 
 });

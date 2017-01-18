@@ -3,6 +3,11 @@ var _ = require('lodash');
 //var socket = require('socket.io-client')('http://cs210a.herokuapp.com')
 var socket = require('socket.io-client')('http://localhost:5000');
 
+socket.on('connected', function(data) {
+  data.chat.forEach(function(msg) {
+    console.log(msg.sender + ': ' + msg.message);
+  });
+})
 socket.on('disconnect', function() {
   console.log('Sockets: Disconnected from server.');
 });

@@ -34,11 +34,6 @@
     <script>
       var socket = io();
 
-      window.setInterval(function() {
-        var elem = document.getElementById('messages');
-        elem.scrollTop = elem.scrollHeight;
-      }, 500);
-
       function showText(text) {
         $('#messages').append($('<li>').text(text));
       }

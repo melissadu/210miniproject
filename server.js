@@ -45,9 +45,11 @@ io.on('connection', function(socket){
       message: "Someone else connected!",
       timestamp: getCurrentTime()
   });
+  
   socket.on('chat message', function(msg){
     io.emit('chat message', msg);
   });
+
   socket.on('disconnect', function(msg){
     socket.broadcast.emit('chat message', {
       type: "text",
@@ -56,6 +58,7 @@ io.on('connection', function(socket){
       timestamp: getCurrentTime()
     });
   });
+
 });
 
 

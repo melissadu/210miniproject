@@ -13,7 +13,7 @@
       input {height: 50px;}
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
-      #messages {overflow:hidden; overflow-y:scroll;}
+      #messages {overflow-y:auto;}
       ul {height: 90vh; border: 2px solid black;}
     </style>
   </head>
@@ -27,6 +27,11 @@
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io();
+
+      window.setInterval(function() {
+        var elem = document.getElementById('messages');
+        elem.scrollTop = elem.scrollHeight;
+      }, 500);
 
       function showText(text) {
         $('#messages').append($('<li>').text(text));

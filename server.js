@@ -6,11 +6,18 @@ var app = express();
 var server = http.Server(app);
 
 var io = require('socket.io')(server);
+var switchboard = require('rtc-switchboard')(server);
 
 
 // Serve static HTML files
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
+});
+app.get('/rtc.min.js', function(req, res){
+  res.sendFile(__dirname + '/rtc.min.js');
+});
+app.get('/webcam_client.html', function(req, res){
+  res.sendFile(__dirname + '/webcam_client.html');
 });
 
 

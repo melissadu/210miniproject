@@ -49,6 +49,10 @@
         $('#messages').append('<li><img src="' + photo + '"/></li>');
       }
 
+      function previewUrl(url) {
+        $('#messages').append('<li><iframe src="' + url + '"  sandbox="allow-same-origin allow-scripts allow-forms" width = "600" height = "300"></iframe></li>');
+      }
+
       function getMessageBoxText() {
         return $('#m').val();
       }
@@ -85,6 +89,10 @@
           }
           displayText += msg.sender + ': ' + msg.message;
           showText(displayText);
+          console.log(msg.message.substring(0,4) )
+          if(msg.message.substring(0,4) == "http"){
+            previewUrl(msg.message);
+          }
         } else if (msg.type == "photo"){
           var displayText = '';
           if (msg.timestamp !== undefined) {

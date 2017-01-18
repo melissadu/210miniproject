@@ -38,6 +38,14 @@
       function clearMessageBoxText() {
         $('#m').val('');
       }
+      function showChatMessage(msg) {
+        var displayText = '';
+        if (msg.timestamp !== undefined) {
+          displayText += '[' + msg.timestamp + '] ';
+        }
+        displayText += msg.sender + ': ' + msg.message;
+        showText(displayText);
+      }
 
       $('form').submit(function(event){
         var d = new Date();
@@ -51,16 +59,11 @@
         event.preventDefault(); // for consistent correct behavior on form submissions
       });
 
-      socket.on('chat message', function(msg){
-        var displayText = '';
-        if (msg.timestamp !== undefined) {
-          displayText += '[' + msg.timestamp + '] ';
-        }
-        displayText += msg.sender + ': ' + msg.message;
-        showText(displayText);
-      });
-      socket.on('connected', function() {
+      socket.on('chat message', showChatMessage);
+      socket.on('connected', function(data) {
         showText('Connected to the server!');
+        data.chat.forEach(showChatMessage);
+        showText('------------------------------------------');
       });
     </script>
   </body>

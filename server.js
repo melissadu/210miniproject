@@ -88,6 +88,9 @@ io.on('connection', function(socket){
 
   // Pass messages between clients
   socket.on('chat message', function(msg){
+    if (!msg.sender) {
+      msg.sender = "Client " + getID(socket.id);
+    }
     io.emit('chat message', msg);
     logChatMessage(msg);
   });

@@ -32,7 +32,7 @@ app.use(function(err, req, res, next) {
 
 
 function getCurrentTime() {
-  return moment().tz('America/Los_Angeles').format('M/DD/YYYY h:mm:ss A');
+  return moment().tz('America/Los_Angeles').format('M/DD/YYYY, h:mm:ss A');
 }
 
 function makeServerMessage(messageText) {

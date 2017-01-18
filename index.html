@@ -19,6 +19,7 @@
       .rtc {max-width: 300px;}
       div {display: inline-block;}
       ul {height: 90vh; border: 2px solid black;}
+      iframe {width: 600px; height: 300px; resize: both; overflow: auto;}
       img {max-width: 600px; max-height: 600px;}
     </style>
   </head>
@@ -51,7 +52,7 @@
       }
 
       function previewUrl(url) {
-        $('#messages').append('<li><iframe src="' + url + '"  sandbox="allow-same-origin allow-scripts allow-forms" width = "600" height = "300"></iframe></li>');
+        $('#messages').append('<li><iframe src="' + url + '"  sandbox="allow-same-origin allow-scripts allow-forms"></iframe></li>');
       }
 
       function getMessageBoxText() {

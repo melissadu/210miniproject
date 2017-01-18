@@ -14,19 +14,20 @@
       #image_button {width: 15%; background: rgb(130, 224, 255); border: none; padding: 10px;} 
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
-      #messages {overflow:hidden; overflow-y:scroll;}
-      #message-box {max-width: 60%}
+      #message-box {width: 650px; resize:horizontal; overflow:auto;}
       .rtc {max-width: 300px;}
-      div {display: inline-block;}
-      ul {height: 90vh; border: 2px solid black;}
+      .panel {display: inline-block; border: 2px solid black;}
+      ul {height: 90vh;}
       iframe {width: 600px; height: 300px; resize: both; overflow: auto;}
       img {max-width: 600px; max-height: 600px;}
     </style>
   </head>
   <body>
-    <div id = "message-box"><ul id="messages"></ul></div>
-    <div id="l-video"></div>
-    <div id="r-video"></div>
+    <div id="message-box" class="panel"><ul id="messages"></ul></div>
+    <div id="webcam-box" class="panel">
+      <div id="l-video"></div>
+      <div id="r-video"></div>
+    </div>
     <form action="#">
       <input id="name" placeholder="Enter Name Here" autocomplete="off" />
       <input id="m" placeholder="Message" autocomplete="off" />

@@ -1,6 +1,6 @@
 # CS210 Mini Project
 
-Supports image, text, and video livestream.
+Supports image, text, and video livestream
 
 We used tutorials and starter code from the following places:
 * Socket.io server & web client as our project’s starter code: http://socket.io/get-started/chat/
